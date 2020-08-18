@@ -1,0 +1,2 @@
+# ignore because it contains secrets
+device_config.h
