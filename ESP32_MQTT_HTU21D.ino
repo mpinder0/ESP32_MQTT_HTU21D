@@ -4,11 +4,15 @@
 #include <PubSubClient.h>
 #include "device_config.h"
 
-const bool WIFI_DEBUG = true;
+const bool WIFI_DEBUG = false;
 const int MAX_CONNECT_ATTEMPTS = 3;
 const int CONNECT_ATTEMPT_DURATION = 5; // seconds(ish)
 const long uS_TO_S_FACTOR = 1000000;
+
 const int LED_PIN = 2;
+const int xshort_duration = 5;
+const int short_duration = 100;
+const int long_duration = 1000;
 
 const String TOPIC_TEMP =  TOPIC_BASE + "/" + CLIENT_NAME + "/" + "temperature";
 const String TOPIC_HUMD =  TOPIC_BASE + "/" + CLIENT_NAME + "/" + "humidity";
@@ -19,9 +23,6 @@ PubSubClient client(espClient);
 
 void debugFlasher(int n)
 {
-  const int short_duration = 200;
-  const int long_duration = 1000;
-
   if(n < 1)
   {
     // 0 or less, do one long flash
@@ -42,7 +43,7 @@ void debugFlasher(int n)
   }
   else
   {
-    // otherwise flash the LED the specified number of times
+    // otherwise short-flash the LED the specified number of times
     for(int i=0; i<n; i++)
     {
       digitalWrite(LED_PIN, HIGH);
@@ -74,20 +75,20 @@ bool wifiConnect()
     while(wifi_status != WL_CONNECTED && attempt_checked < CONNECT_ATTEMPT_DURATION)
     {
       attempt_checked++;
-      digitalWrite(LED_PIN, HIGH);
-      delay(100);
-      digitalWrite(LED_PIN, LOW);
-      delay(900);
-
       wifi_status = WiFi.status();
       
       if(WIFI_DEBUG == true)
       {
         Serial.println(wifi_status);
+        digitalWrite(LED_PIN, HIGH);
+        delay(xshort_duration);
+        digitalWrite(LED_PIN, LOW);
+        delay(1000 - xshort_duration);
       }
       else
       {
         Serial.print(".");
+        delay(1000);
       }
     }
 
