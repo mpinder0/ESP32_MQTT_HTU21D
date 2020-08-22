@@ -98,7 +98,7 @@ bool wifiConnect()
       debugFlasher(wifi_status);
     }
   }
-  while (wifi_status != WL_CONNECTED && attempts <= MAX_CONNECT_ATTEMPTS);
+  while (wifi_status != WL_CONNECTED && attempts < MAX_CONNECT_ATTEMPTS);
 
   if(wifi_status == WL_CONNECTED)
   {
