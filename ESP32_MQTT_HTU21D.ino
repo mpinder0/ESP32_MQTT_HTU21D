@@ -218,7 +218,8 @@ void loop()
 {
   bool wifi_connected = false;
   bool mqtt_connected = false;
-  
+
+  Serial.println("Awake again!");
   // Connect to Wifi network
   if(WiFi.status() == WL_CONNECTED)
   {
@@ -244,9 +245,10 @@ void loop()
     if(mqtt_connected == true)    
     {
       publishSensorValues();
+      client.disconnect();
     }
   }
-  Serial.print("Sleeping now...");
+  Serial.println("Sleeping now...\n");
   delay(INTERVAL * 1000);
   
 }
