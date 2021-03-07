@@ -189,6 +189,7 @@ void setup()
   digitalWrite(h_pin, HIGH);
   digitalWrite(l_pin, LOW);
 
+  /*
   esp_sleep_enable_timer_wakeup(INTERVAL * uS_TO_S_FACTOR);
 
   // Connect to Wifi network
@@ -209,9 +210,43 @@ void setup()
   delay(1000);
   Serial.flush(); 
   esp_deep_sleep_start();
+  */
 }
+
 
 void loop()
 {
-  // nothing to loop
+  bool wifi_connected = false;
+  bool mqtt_connected = false;
+  
+  // Connect to Wifi network
+  if(WiFi.status() == WL_CONNECTED)
+  {
+    wifi_connected = true;
+  }
+  else
+  {
+    wifi_connected = wifiConnect();
+  }
+  
+  if(wifi_connected == true)
+  {
+    // Connect to MQTT broker
+    if(client.state() == MQTT_CONNECTED)
+    {
+      mqtt_connected = true;
+    }
+    else 
+    {
+      mqtt_connected = mqttConnect();
+    }
+    
+    if(mqtt_connected == true)    
+    {
+      publishSensorValues();
+    }
+  }
+  Serial.print("Sleeping now...");
+  delay(INTERVAL * 1000);
+  
 }
