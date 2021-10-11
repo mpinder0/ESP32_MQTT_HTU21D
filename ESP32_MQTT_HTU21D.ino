@@ -158,7 +158,7 @@ void publishSensorValues()
   Serial.print(humd, 1);
   Serial.print("%");
   // some basic validation
-  if(humd >= 0.0 && humd <= 100.0)
+  if(humd >= 0.0 && humd <= 200.0)
   {
     // Publish to MQTT
     client.publish(TOPIC_HUMD.c_str(), String(humd).c_str()); 
